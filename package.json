@@ -1,0 +1,34 @@
+{
+  "name": "touchdesigner-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for controlling TouchDesigner with visual feedback (TOP capture / screen capture)",
+  "type": "module",
+  "license": "MIT",
+  "author": "mintiasaikoh",
+  "bin": {
+    "touchdesigner-mcp": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "td",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "prepare": "npm run build"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "screenshot-desktop": "^1.15.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "typescript": "^5.5.0"
+  }
+}
