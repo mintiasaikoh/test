@@ -33,9 +33,10 @@ npm run build
 
 $distPath = Join-Path $Dir 'dist\index.js'
 if (Get-Command claude -ErrorAction SilentlyContinue) {
-    Write-Host '==> Claude Code に MCP サーバーを登録します'
+    Write-Host '==> Claude Code に MCP サーバーを登録します (全プロジェクト共通)'
     claude mcp remove touchdesigner 2>$null | Out-Null
-    claude mcp add touchdesigner -- node $distPath
+    claude mcp remove --scope user touchdesigner 2>$null | Out-Null
+    claude mcp add --scope user touchdesigner -- node $distPath
 } else {
     Write-Host ''
     Write-Host 'claude CLI が見つからなかったので、手動で登録してください:'

@@ -33,9 +33,10 @@ npm install
 npm run build
 
 if command -v claude >/dev/null 2>&1; then
-  echo "==> Claude Code に MCP サーバーを登録します"
+  echo "==> Claude Code に MCP サーバーを登録します (全プロジェクト共通)"
   claude mcp remove touchdesigner >/dev/null 2>&1 || true
-  claude mcp add touchdesigner -- node "$DIR/dist/index.js"
+  claude mcp remove --scope user touchdesigner >/dev/null 2>&1 || true
+  claude mcp add --scope user touchdesigner -- node "$DIR/dist/index.js"
 else
   cat <<EOF
 
