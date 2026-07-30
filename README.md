@@ -17,7 +17,23 @@ flowchart LR
 
 ## セットアップ
 
-### 1. MCP サーバーをビルド
+### かんたんインストール (推奨)
+
+**macOS / Linux:**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/mintiasaikoh/touchdesigner-mcp/main/install.sh | bash
+```
+
+**Windows (PowerShell):**
+
+```powershell
+irm https://raw.githubusercontent.com/mintiasaikoh/touchdesigner-mcp/main/install.ps1 | iex
+```
+
+`~/touchdesigner-mcp` にクローン → ビルド → Claude Code への登録まで自動でやります(claude CLI が無い場合は手動登録の手順を表示)。実行後は「[2. TouchDesigner 側にブリッジをインストール](#2-touchdesigner-側にブリッジをインストール)」だけやれば完了です。
+
+### 1. MCP サーバーをビルド (手動でやる場合)
 
 ```bash
 git clone https://github.com/mintiasaikoh/touchdesigner-mcp.git
