@@ -32,6 +32,17 @@ echo "==> npm install && npm run build"
 npm install
 npm run build
 
+PALETTE_INSTALLED=0
+if [ "$(uname)" = "Darwin" ]; then
+  for palette in "$HOME/Library/Application Support/Derivative"/TouchDesigner*/Palette; do
+    if [ -d "$palette" ]; then
+      cp "$DIR/td/mcp_bridge.tox" "$palette/"
+      echo "==> mcp_bridge.tox をパレットにコピーしました: $palette"
+      PALETTE_INSTALLED=1
+    fi
+  done
+fi
+
 if command -v claude >/dev/null 2>&1; then
   echo "==> Claude Code に MCP サーバーを登録します (全プロジェクト共通)"
   claude mcp remove touchdesigner >/dev/null 2>&1 || true
@@ -62,9 +73,21 @@ cat <<EOF
 ✅ インストール完了: $DIR
 
 残りは TouchDesigner 側の1ステップだけ:
-  1. TouchDesigner で Alt+T (Dialogs > Textport and DATs) を開く
-  2. $DIR/td/setup_mcp.py の中身を丸ごとペーストして Enter
-  3. "Listening on http://127.0.0.1:9981" と出ればOK
+EOF
+
+if [ "$PALETTE_INSTALLED" = "1" ]; then
+  cat <<EOF
+  パレット (My Components) から mcp_bridge をネットワークにドラッグ&ドロップ。
+  プロジェクトを保存すれば、次回以降は開くだけで接続できます。
+EOF
+else
+  cat <<EOF
+  $DIR/td/mcp_bridge.tox をネットワークにドラッグ&ドロップ。
+  (または Textport (Alt+T) に $DIR/td/setup_mcp.py の中身をペーストして実行)
+EOF
+fi
+
+cat <<EOF
 
 あとは Claude に「td_info で TouchDesigner につながってるか確認して」と頼んでください。
 EOF

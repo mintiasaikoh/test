@@ -31,6 +31,15 @@ Write-Host '==> npm install && npm run build'
 npm install
 npm run build
 
+$PaletteInstalled = $false
+$paletteDirs = Get-ChildItem -Path (Join-Path $env:LOCALAPPDATA 'Derivative') -Directory -Filter 'TouchDesigner*' -ErrorAction SilentlyContinue |
+    ForEach-Object { Join-Path $_.FullName 'Palette' } | Where-Object { Test-Path $_ }
+foreach ($palette in $paletteDirs) {
+    Copy-Item (Join-Path $Dir 'td\mcp_bridge.tox') $palette -Force
+    Write-Host "==> mcp_bridge.tox をパレットにコピーしました: $palette"
+    $PaletteInstalled = $true
+}
+
 $distPath = Join-Path $Dir 'dist\index.js'
 if (Get-Command claude -ErrorAction SilentlyContinue) {
     Write-Host '==> Claude Code に MCP サーバーを登録します (全プロジェクト共通)'
@@ -47,6 +56,12 @@ Write-Host ''
 Write-Host "✅ インストール完了: $Dir"
 Write-Host ''
 Write-Host '残りは TouchDesigner 側の1ステップだけ:'
-Write-Host '  1. TouchDesigner で Alt+T (Dialogs > Textport and DATs) を開く'
-Write-Host "  2. $Dir\td\setup_mcp.py の中身を丸ごとペーストして Enter"
-Write-Host '  3. "Listening on http://127.0.0.1:9981" と出ればOK'
+if ($PaletteInstalled) {
+    Write-Host '  パレット (My Components) から mcp_bridge をネットワークにドラッグ&ドロップ。'
+    Write-Host '  プロジェクトを保存すれば、次回以降は開くだけで接続できます。'
+} else {
+    Write-Host "  $Dir\td\mcp_bridge.tox をネットワークにドラッグ&ドロップ。"
+    Write-Host "  (または Textport (Alt+T) に $Dir\td\setup_mcp.py の中身をペーストして実行)"
+}
+Write-Host ''
+Write-Host 'あとは Claude に「td_info で TouchDesigner につながってるか確認して」と頼んでください。'

@@ -44,13 +44,29 @@ npm run build
 
 ### 2. TouchDesigner 側にブリッジをインストール
 
-1. TouchDesigner でプロジェクトを開く
-2. ネットワークに **Text DAT** を 1 個作る
-3. [`td/setup_mcp.py`](td/setup_mcp.py) の中身を全部コピーして Text DAT にペースト
-4. Text DAT を右クリック → **Run Script**
+#### 方法A: mcp_bridge.tox をドラッグ&ドロップ (推奨)
 
-`/mcp_bridge` という Base COMP が作られ、中の WebServer DAT が `http://127.0.0.1:9981` で待ち受けます。
-(Textport (Alt+T) に直接ペーストして実行しても OK。再実行はいつでも安全で、ハンドラが最新版に上書きされます)
+[`td/mcp_bridge.tox`](td/mcp_bridge.tox) をネットワークにドラッグ&ドロップするだけです。
+配置した瞬間から WebServer DAT が `http://127.0.0.1:9981` で待ち受けます。
+**プロジェクトを保存すればブリッジも一緒に保存される**ので、次回以降は .toe を開くだけで接続できます。
+
+インストールスクリプト(かんたんインストール)を使った場合は、tox が TouchDesigner の
+ユーザーパレットにも自動コピーされるので、パレットの **My Components** からドラッグできます。
+手動でパレットに入れる場合のコピー先:
+
+- macOS: `~/Library/Application Support/Derivative/TouchDesigner099/Palette/`
+- Windows: `%LOCALAPPDATA%\Derivative\TouchDesigner099\Palette\`
+
+#### 方法B: setup_mcp.py を実行
+
+1. ネットワークに **Text DAT** を 1 個作る
+2. [`td/setup_mcp.py`](td/setup_mcp.py) の中身を全部コピーして Text DAT にペースト
+3. Text DAT を右クリック → **Run Script**
+
+`/mcp_bridge` という Base COMP が作られます。Textport (Alt+T) に直接ペーストして実行しても OK。
+再実行はいつでも安全で、ハンドラが最新版に上書きされます。
+(`mcp_bridge.tox` はこのスクリプトの実行結果を書き出したものです。ハンドラを変更したら
+`op('/mcp_bridge').save('td/mcp_bridge.tox')` で tox も再生成してください)
 
 > ⚠️ ブリッジは任意の Python を実行できるので、信頼できないネットワークに公開しないでください。ローカルマシンでの利用を想定しています。
 
